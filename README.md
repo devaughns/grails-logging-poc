@@ -4,7 +4,7 @@
 Example application demonstrating logging with Grails. <br/>
 The application will:
 - log an info message every 5 seconds
-- log an error message every 15 sedconds
+- log an error message every 15 seconds
 
 ## Running the application
 To run the application, execute `./gradlew bootRun` from the root directory
@@ -32,7 +32,7 @@ encoder(PatternLayoutEncoder) {
 ```
 
 When assigning a rolling policy we give it 3 arguments
-1. `fileNamePattern` the pattern of the filename along with the subdirectory where to write them
+1. `fileNamePattern` the pattern of the filename along with the sub-directory where to write them
 2. `maxHistory` the maximum number of files to retain
 3. `totalSizeCap` the total size of the log files
 
