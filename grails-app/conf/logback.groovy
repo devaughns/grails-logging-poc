@@ -1,4 +1,5 @@
-import ch.qos.logback.core.util.FileSize
+import ch.qos.logback.classic.filter.LevelFilter
+import ch.qos.logback.core.spi.FilterReply
 import grails.util.BuildSettings
 import grails.util.Environment
 import org.springframework.boot.logging.logback.ColorConverter
@@ -37,16 +38,29 @@ if (Environment.isDevelopmentMode() && targetDir != null) {
 }
 root(ERROR, ['STDOUT'])
 
-def HOME_DIR = "."
-appender("ROLLING", RollingFileAppender) {
+
+def daily = timestamp("yyyy-MM-dd")
+def BASE_DIR = "./logs/${daily}"
+appender("base", FileAppender){
+    file = "${BASE_DIR}/info.log"
     encoder(PatternLayoutEncoder) {
-        pattern = "%level %logger - %msg%n"
+        pattern = "%d{ISO8601}:%p in %t \\(category %c\\) - %m%n"
     }
-    rollingPolicy(TimeBasedRollingPolicy) {
-        fileNamePattern = "${HOME_DIR}/logs/myApp-%d{yyyy-MM-dd_HH-mm}.log"
-        maxHistory = 5
-        totalSizeCap = FileSize.valueOf("5kB")
+    filter(LevelFilter) {
+        level = INFO
+        onMismatch = FilterReply.DENY
     }
 }
 
-logger('grails.logging', INFO, ['STDOUT', 'ROLLING'], false)
+appender("framework", FileAppender){
+    file = "${BASE_DIR}/error.log"
+    encoder(PatternLayoutEncoder) {
+        pattern = "%d{ISO8601}:%p in %t \\(category %c\\) - %m%n"
+    }
+    filter(LevelFilter) {
+        level = ERROR
+        onMismatch = FilterReply.DENY
+    }
+}
+
+logger 'root', INFO, ['STDOUT','framework', 'base'], false

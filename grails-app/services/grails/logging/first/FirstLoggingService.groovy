@@ -1,4 +1,4 @@
-package grails.logging
+package grails.logging.first
 
 import groovy.transform.CompileStatic
 import groovy.util.logging.Slf4j
@@ -8,18 +8,18 @@ import java.time.LocalDateTime
 
 @Slf4j
 @CompileStatic
-class ScheduledLoggingService {
+class FirstLoggingService {
 
     static lazyInit = false
 
     @Scheduled(fixedRate=5000L)
     void info() {
-        log.info "The local time is: {}",  LocalDateTime.now()
+        log.info "info from first: {}",  LocalDateTime.now()
     }
 
     @Scheduled(fixedRate=15000L)
     void error() {
-        log.error "This shows an error at ${LocalDateTime.now()}"
+        log.error "error from first:  ${LocalDateTime.now()}"
     }
 
 }
